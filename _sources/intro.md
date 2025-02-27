@@ -1,11 +1,15 @@
-# Welcome to your Jupyter Book
+# Penambangan Data 
 
-This is a small sample book to give you a feel for how book content is
-structured.
-It shows off a few of the major file types, as well as some sample content.
-It does not go in-depth into any particular topic - check out [the Jupyter Book documentation](https://jupyterbook.org) for more information.
+Apa Itu Penambangan Data?
+Penambangan data adalah proses mengidentifikasi pola, tren, dan hubungan dalam data besar menggunakan teknik analisis yang canggih. Dengan bantuan algoritma kecerdasan buatan, pembelajaran mesin, dan metode statistik, data mining dapat mengubah data mentah menjadi informasi yang dapat dimanfaatkan untuk pengambilan keputusan.
 
-Check out the content pages bundled with this sample book to see more.
+Nama : MUHAMMAD NAUFAL
+
+Nim : 230411100004
+
+Prodi : Teknik Informatika
+
+Email : m.naufal090205@gmail.com
 
 ```{tableofcontents}
 ```
