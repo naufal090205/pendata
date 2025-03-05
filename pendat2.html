@@ -181,11 +181,6 @@
         <ul class="current nav bd-sidenav">
 <li class="toctree-l1"><a class="reference internal" href="pendat1.html">Tugas 1 Pendata</a></li>
 <li class="toctree-l1 current active"><a class="current reference internal" href="#"><strong>Tugas 2</strong></a></li>
-
-
-
-
-
 </ul>
 
     </div>
@@ -381,23 +376,18 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Tugas 2</strong></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#penjelasan-outlier-deteksi-dengan-k-nearest-neighbors-knn-dalam-data-understanding"><strong>Penjelasan Outlier Deteksi dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#apa-itu-outlier">Apa Itu Outlier?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deteksi-outlier-dengan-k-nearest-neighbors-knn"><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN)</strong></a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deteksi-outlier-dengan-knn"><strong>Langkah-langkah Deteksi Outlier dengan KNN</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#penjelasan-outlier-deteksi-dengan-k-nearest-neighbors-knn-dalam-data-understanding"><strong>Penjelasan Outlier Deteksi dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deteksi-outlier-dengan-k-nearest-neighbors-knn"><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN)</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deteksi-outlier-dengan-knn"><strong>Langkah-langkah Deteksi Outlier dengan KNN</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tentukan-parameter-k-jumlah-tetangga-terdekat">1. Tentukan Parameter K (Jumlah Tetangga Terdekat)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hitung-jarak-antar-titik-data">2. Hitung Jarak Antar Titik Data</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hitung-skor-outlier">3. Hitung Skor Outlier</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tentukan-threshold-ambang-batas">4. Tentukan Threshold (Ambang Batas)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kelebihan-dan-kekurangan-knn-dalam-deteksi-outlier"><strong>Kelebihan dan Kekurangan KNN dalam Deteksi Outlier</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan"><strong>Kesimpulan</strong></a></li>
 </ul>
 </li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#kelebihan-dan-kekurangan-knn-dalam-deteksi-outlier"><strong>Kelebihan dan Kekurangan KNN dalam Deteksi Outlier</strong></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan"><strong>Kesimpulan</strong></a></li>
-</ul>
-
             </nav>
         </div>
     </div>
@@ -410,23 +400,21 @@ document.write(`
                   
   <section class="tex2jax_ignore mathjax_ignore" id="tugas-2">
 <h1><strong>Tugas 2</strong><a class="headerlink" href="#tugas-2" title="Link to this heading">#</a></h1>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="penjelasan-outlier-deteksi-dengan-k-nearest-neighbors-knn-dalam-data-understanding">
-<h1><strong>Penjelasan Outlier Deteksi dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong><a class="headerlink" href="#penjelasan-outlier-deteksi-dengan-k-nearest-neighbors-knn-dalam-data-understanding" title="Link to this heading">#</a></h1>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="apa-itu-outlier">
-<h1>Apa Itu Outlier?<a class="headerlink" href="#apa-itu-outlier" title="Link to this heading">#</a></h1>
-<p>Outlier adalah data yang memiliki nilai yang jauh berbeda dari mayoritas data lainnya dalam suatu dataset. Outlier dapat muncul karena berbagai alasan, seperti kesalahan pengukuran, anomali dalam sistem, atau variasi alami dalam data.</p>
+<section id="penjelasan-outlier-deteksi-dengan-k-nearest-neighbors-knn-dalam-data-understanding">
+<h2><strong>Penjelasan Outlier Deteksi dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong><a class="headerlink" href="#penjelasan-outlier-deteksi-dengan-k-nearest-neighbors-knn-dalam-data-understanding" title="Link to this heading">#</a></h2>
+<p>Apa Itu Outlier?
+Outlier adalah data yang memiliki nilai yang jauh berbeda dari mayoritas data lainnya dalam suatu dataset. Outlier dapat muncul karena berbagai alasan, seperti kesalahan pengukuran, anomali dalam sistem, atau variasi alami dalam data.</p>
 <p>Outlier perlu dideteksi karena dapat mempengaruhi analisis data, seperti:</p>
 <p>Menyebabkan model prediktif menjadi kurang akurat.
 Mengganggu distribusi data, terutama dalam analisis statistik.
 Mengidentifikasi anomali yang mungkin relevan, seperti kecurangan atau kesalahan sistem.</p>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="deteksi-outlier-dengan-k-nearest-neighbors-knn">
-<h1><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN)</strong><a class="headerlink" href="#deteksi-outlier-dengan-k-nearest-neighbors-knn" title="Link to this heading">#</a></h1>
+<section id="deteksi-outlier-dengan-k-nearest-neighbors-knn">
+<h3><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN)</strong><a class="headerlink" href="#deteksi-outlier-dengan-k-nearest-neighbors-knn" title="Link to this heading">#</a></h3>
 <p>K-Nearest Neighbors (KNN) adalah salah satu metode yang dapat digunakan untuk mendeteksi outlier. Pendekatan KNN dalam deteksi outlier didasarkan pada konsep kedekatan antara titik data berdasarkan metrik tertentu, seperti Euclidean Distance atau Manhattan Distance.</p>
+</section>
 <section id="langkah-langkah-deteksi-outlier-dengan-knn">
-<h2><strong>Langkah-langkah Deteksi Outlier dengan KNN</strong><a class="headerlink" href="#langkah-langkah-deteksi-outlier-dengan-knn" title="Link to this heading">#</a></h2>
+<h3><strong>Langkah-langkah Deteksi Outlier dengan KNN</strong><a class="headerlink" href="#langkah-langkah-deteksi-outlier-dengan-knn" title="Link to this heading">#</a></h3>
+</section>
 <section id="tentukan-parameter-k-jumlah-tetangga-terdekat">
 <h3>1. Tentukan Parameter K (Jumlah Tetangga Terdekat)<a class="headerlink" href="#tentukan-parameter-k-jumlah-tetangga-terdekat" title="Link to this heading">#</a></h3>
 <p>Parameter K menentukan berapa banyak tetangga yang akan dipertimbangkan untuk menilai apakah sebuah titik merupakan outlier.
@@ -446,10 +434,8 @@ Semakin jauh suatu titik dari mayoritas data lainnya, semakin besar kemungkinan 
 <p>Jika skor outlier melebihi ambang batas tertentu, maka titik tersebut diklasifikasikan sebagai outlier.
 Ambang batas dapat ditentukan berdasarkan distribusi skor outlier atau menggunakan metode statistik seperti percentile.</p>
 </section>
-</section>
-</section>
-<section class="tex2jax_ignore mathjax_ignore" id="kelebihan-dan-kekurangan-knn-dalam-deteksi-outlier">
-<h1><strong>Kelebihan dan Kekurangan KNN dalam Deteksi Outlier</strong><a class="headerlink" href="#kelebihan-dan-kekurangan-knn-dalam-deteksi-outlier" title="Link to this heading">#</a></h1>
+<section id="kelebihan-dan-kekurangan-knn-dalam-deteksi-outlier">
+<h3><strong>Kelebihan dan Kekurangan KNN dalam Deteksi Outlier</strong><a class="headerlink" href="#kelebihan-dan-kekurangan-knn-dalam-deteksi-outlier" title="Link to this heading">#</a></h3>
 <p>✅ Kelebihan:</p>
 <p>Mudah dipahami karena berbasis jarak antar data.
 Dapat digunakan untuk berbagai jenis data, termasuk data numerik dan kategorikal.
@@ -459,8 +445,8 @@ Tidak memerlukan asumsi distribusi data, berbeda dengan metode statistik seperti
 Sensitif terhadap pemilihan K, sehingga perlu eksperimen untuk mendapatkan nilai K yang optimal.
 Kurang efektif pada data berdimensi tinggi (Curse of Dimensionality) karena jarak antar titik menjadi kurang bermakna.</p>
 </section>
-<section class="tex2jax_ignore mathjax_ignore" id="kesimpulan">
-<h1><strong>Kesimpulan</strong><a class="headerlink" href="#kesimpulan" title="Link to this heading">#</a></h1>
+<section id="kesimpulan">
+<h3><strong>Kesimpulan</strong><a class="headerlink" href="#kesimpulan" title="Link to this heading">#</a></h3>
 <p>Deteksi outlier dengan KNN adalah metode yang efektif dalam memahami data dan mengidentifikasi titik-titik anomali. Dengan memahami kedekatan antar data, metode ini dapat membantu dalam meningkatkan kualitas data sebelum digunakan untuk analisis lebih lanjut atau model prediktif.</p>
 <p>Jika dataset besar atau memiliki dimensi tinggi, bisa dipertimbangkan penggunaan metode lain seperti Isolation Forest atau Autoencoder Neural Networks untuk deteksi outlier yang lebih efisien.</p>
 <div class="cell docutils container">
@@ -923,6 +909,8 @@ Kurang efektif pada data berdimensi tinggi (Curse of Dimensionality) karena jara
 </div>
 </div>
 </section>
+</section>
+</section>
 
     <script type="text/x-thebe-config">
     {
@@ -979,23 +967,18 @@ Kurang efektif pada data berdimensi tinggi (Curse of Dimensionality) karena jara
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Tugas 2</strong></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#penjelasan-outlier-deteksi-dengan-k-nearest-neighbors-knn-dalam-data-understanding"><strong>Penjelasan Outlier Deteksi dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#apa-itu-outlier">Apa Itu Outlier?</a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#deteksi-outlier-dengan-k-nearest-neighbors-knn"><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN)</strong></a><ul class="visible nav section-nav flex-column">
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deteksi-outlier-dengan-knn"><strong>Langkah-langkah Deteksi Outlier dengan KNN</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#penjelasan-outlier-deteksi-dengan-k-nearest-neighbors-knn-dalam-data-understanding"><strong>Penjelasan Outlier Deteksi dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong></a><ul class="nav section-nav flex-column">
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#deteksi-outlier-dengan-k-nearest-neighbors-knn"><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN)</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deteksi-outlier-dengan-knn"><strong>Langkah-langkah Deteksi Outlier dengan KNN</strong></a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tentukan-parameter-k-jumlah-tetangga-terdekat">1. Tentukan Parameter K (Jumlah Tetangga Terdekat)</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hitung-jarak-antar-titik-data">2. Hitung Jarak Antar Titik Data</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#hitung-skor-outlier">3. Hitung Skor Outlier</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#tentukan-threshold-ambang-batas">4. Tentukan Threshold (Ambang Batas)</a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kelebihan-dan-kekurangan-knn-dalam-deteksi-outlier"><strong>Kelebihan dan Kekurangan KNN dalam Deteksi Outlier</strong></a></li>
+<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan"><strong>Kesimpulan</strong></a></li>
 </ul>
 </li>
 </ul>
-</li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#kelebihan-dan-kekurangan-knn-dalam-deteksi-outlier"><strong>Kelebihan dan Kekurangan KNN dalam Deteksi Outlier</strong></a></li>
-<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan"><strong>Kesimpulan</strong></a></li>
-</ul>
-
   </nav></div>
 
 </div></div>
