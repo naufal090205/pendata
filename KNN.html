@@ -1,0 +1,857 @@
+
+<!DOCTYPE html>
+
+
+<html lang="en" data-content_root="./" >
+
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" /><meta name="viewport" content="width=device-width, initial-scale=1" />
+
+    <title>Deteksi Outlier dengan K-Nearest Neighbors (KNN) dalam Data Understanding &#8212; Penambangan Data</title>
+  
+  
+  
+  <script data-cfasync="false">
+    document.documentElement.dataset.mode = localStorage.getItem("mode") || "";
+    document.documentElement.dataset.theme = localStorage.getItem("theme") || "";
+  </script>
+  
+  <!-- Loaded before other Sphinx assets -->
+  <link href="_static/styles/theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/bootstrap.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+<link href="_static/styles/pydata-sphinx-theme.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+
+  
+  <link href="_static/vendor/fontawesome/6.5.2/css/all.min.css?digest=dfe6caa3a7d634c4db9b" rel="stylesheet" />
+  <link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-solid-900.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-brands-400.woff2" />
+<link rel="preload" as="font" type="font/woff2" crossorigin href="_static/vendor/fontawesome/6.5.2/webfonts/fa-regular-400.woff2" />
+
+    <link rel="stylesheet" type="text/css" href="_static/pygments.css?v=fa44fd50" />
+    <link rel="stylesheet" type="text/css" href="_static/styles/sphinx-book-theme.css?v=eba8b062" />
+    <link rel="stylesheet" type="text/css" href="_static/togglebutton.css?v=13237357" />
+    <link rel="stylesheet" type="text/css" href="_static/copybutton.css?v=76b2166b" />
+    <link rel="stylesheet" type="text/css" href="_static/mystnb.4510f1fc1dee50b3e5859aac5469c37c29e427902b24a333a5f9fcb2f0b3ac41.css?v=be8a1c11" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-thebe.css?v=4fa983c6" />
+    <link rel="stylesheet" type="text/css" href="_static/sphinx-design.min.css?v=95c83b7e" />
+  
+  <!-- Pre-loaded scripts that we'll load fully later -->
+  <link rel="preload" as="script" href="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b" />
+<link rel="preload" as="script" href="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b" />
+  <script src="_static/vendor/fontawesome/6.5.2/js/all.min.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+    <script src="_static/documentation_options.js?v=9eb32ce0"></script>
+    <script src="_static/doctools.js?v=9a2dae69"></script>
+    <script src="_static/sphinx_highlight.js?v=dc90522c"></script>
+    <script src="_static/clipboard.min.js?v=a7894cd8"></script>
+    <script src="_static/copybutton.js?v=f281be69"></script>
+    <script src="_static/scripts/sphinx-book-theme.js?v=887ef09a"></script>
+    <script>let toggleHintShow = 'Click to show';</script>
+    <script>let toggleHintHide = 'Click to hide';</script>
+    <script>let toggleOpenOnPrint = 'true';</script>
+    <script src="_static/togglebutton.js?v=4a39c7ea"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script src="_static/design-tabs.js?v=f930bc37"></script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
+    <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
+    <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>DOCUMENTATION_OPTIONS.pagename = 'KNN';</script>
+    <link rel="index" title="Index" href="genindex.html" />
+    <link rel="search" title="Search" href="search.html" />
+    <link rel="next" title="Deteksi Outlier dengan metode Local Outlier Factor (LOF) dalam Data Understanding" href="LOF.html" />
+    <link rel="prev" title="Deteksi OutLier" href="Pendat2.html" />
+  <meta name="viewport" content="width=device-width, initial-scale=1"/>
+  <meta name="docsearch:language" content="en"/>
+  </head>
+  
+  
+  <body data-bs-spy="scroll" data-bs-target=".bd-toc-nav" data-offset="180" data-bs-root-margin="0px 0px -60%" data-default-mode="">
+
+  
+  
+  <div id="pst-skip-link" class="skip-link d-print-none"><a href="#main-content">Skip to main content</a></div>
+  
+  <div id="pst-scroll-pixel-helper"></div>
+  
+  <button type="button" class="btn rounded-pill" id="pst-back-to-top">
+    <i class="fa-solid fa-arrow-up"></i>Back to top</button>
+
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-primary-sidebar-checkbox"/>
+  <label class="overlay overlay-primary" for="pst-primary-sidebar-checkbox"></label>
+  
+  <input type="checkbox"
+          class="sidebar-toggle"
+          id="pst-secondary-sidebar-checkbox"/>
+  <label class="overlay overlay-secondary" for="pst-secondary-sidebar-checkbox"></label>
+  
+  <div class="search-button__wrapper">
+    <div class="search-button__overlay"></div>
+    <div class="search-button__search-container">
+<form class="bd-search d-flex align-items-center"
+      action="search.html"
+      method="get">
+  <i class="fa-solid fa-magnifying-glass"></i>
+  <input type="search"
+         class="form-control"
+         name="q"
+         id="search-input"
+         placeholder="Search this book..."
+         aria-label="Search this book..."
+         autocomplete="off"
+         autocorrect="off"
+         autocapitalize="off"
+         spellcheck="false"/>
+  <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd>K</kbd></span>
+</form></div>
+  </div>
+
+  <div class="pst-async-banner-revealer d-none">
+  <aside id="bd-header-version-warning" class="d-none d-print-none" aria-label="Version warning"></aside>
+</div>
+
+  
+    <header class="bd-header navbar navbar-expand-lg bd-navbar d-print-none">
+    </header>
+  
+
+  <div class="bd-container">
+    <div class="bd-container__inner bd-page-width">
+      
+      
+      
+      <div class="bd-sidebar-primary bd-sidebar">
+        
+
+  
+  <div class="sidebar-header-items sidebar-primary__section">
+    
+    
+    
+    
+  </div>
+  
+    <div class="sidebar-primary-items__start sidebar-primary__section">
+        <div class="sidebar-primary-item">
+
+  
+    
+  
+
+<a class="navbar-brand logo" href="intro.html">
+  
+  
+  
+  
+  
+    
+    
+      
+    
+    
+    <img src="_static/foto.jpg" class="logo__image only-light" alt="Penambangan Data - Home"/>
+    <script>document.write(`<img src="_static/foto.jpg" class="logo__image only-dark" alt="Penambangan Data - Home"/>`);</script>
+  
+  
+</a></div>
+        <div class="sidebar-primary-item">
+
+ <script>
+ document.write(`
+   <button class="btn search-button-field search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass"></i>
+    <span class="search-button__default-text">Search</span>
+    <span class="search-button__kbd-shortcut"><kbd class="kbd-shortcut__modifier">Ctrl</kbd>+<kbd class="kbd-shortcut__modifier">K</kbd></span>
+   </button>
+ `);
+ </script></div>
+        <div class="sidebar-primary-item"><nav class="bd-links bd-docs-nav" aria-label="Main">
+    <div class="bd-toc-item navbar-nav active">
+        
+        <ul class="nav bd-sidenav bd-sidenav__home-link">
+            <li class="toctree-l1">
+                <a class="reference internal" href="intro.html">
+                    Penambangan Data
+                </a>
+            </li>
+        </ul>
+        <ul class="current nav bd-sidenav">
+<li class="toctree-l1"><a class="reference internal" href="pendat1.html">Tugas 1 Pendata</a></li>
+<li class="toctree-l1 current active has-children"><a class="reference internal" href="Pendat2.html">Deteksi OutLier</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
+<li class="toctree-l2 current active"><a class="current reference internal" href="#"><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong></a></li>
+<li class="toctree-l2"><a class="reference internal" href="LOF.html"><strong>Deteksi Outlier dengan metode Local Outlier Factor (LOF) dalam Data Understanding</strong></a></li>
+</ul>
+</details></li>
+</ul>
+
+    </div>
+</nav></div>
+    </div>
+  
+  
+  <div class="sidebar-primary-items__end sidebar-primary__section">
+  </div>
+  
+  <div id="rtd-footer-container"></div>
+
+
+      </div>
+      
+      <main id="main-content" class="bd-main" role="main">
+        
+        
+
+<div class="sbt-scroll-pixel-helper"></div>
+
+          <div class="bd-content">
+            <div class="bd-article-container">
+              
+              <div class="bd-header-article d-print-none">
+<div class="header-article-items header-article__inner">
+  
+    <div class="header-article-items__start">
+      
+        <div class="header-article-item"><button class="sidebar-toggle primary-toggle btn btn-sm" title="Toggle primary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+  <span class="fa-solid fa-bars"></span>
+</button></div>
+      
+    </div>
+  
+  
+    <div class="header-article-items__end">
+      
+        <div class="header-article-item">
+
+<div class="article-header-buttons">
+
+
+
+
+
+<div class="dropdown dropdown-source-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Source repositories">
+    <i class="fab fa-github"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book" target="_blank"
+   class="btn btn-sm btn-source-repository-button dropdown-item"
+   title="Source repository"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fab fa-github"></i>
+  </span>
+<span class="btn__text-container">Repository</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li><a href="https://github.com/executablebooks/jupyter-book/issues/new?title=Issue%20on%20page%20%2FKNN.html&body=Your%20issue%20content%20here." target="_blank"
+   class="btn btn-sm btn-source-issues-button dropdown-item"
+   title="Open an issue"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-lightbulb"></i>
+  </span>
+<span class="btn__text-container">Open issue</span>
+</a>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+
+
+<div class="dropdown dropdown-download-buttons">
+  <button class="btn dropdown-toggle" type="button" data-bs-toggle="dropdown" aria-expanded="false" aria-label="Download this page">
+    <i class="fas fa-download"></i>
+  </button>
+  <ul class="dropdown-menu">
+      
+      
+      
+      <li><a href="_sources/KNN.ipynb" target="_blank"
+   class="btn btn-sm btn-download-source-button dropdown-item"
+   title="Download source file"
+   data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file"></i>
+  </span>
+<span class="btn__text-container">.ipynb</span>
+</a>
+</li>
+      
+      
+      
+      
+      <li>
+<button onclick="window.print()"
+  class="btn btn-sm btn-download-pdf-button dropdown-item"
+  title="Print to PDF"
+  data-bs-placement="left" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-file-pdf"></i>
+  </span>
+<span class="btn__text-container">.pdf</span>
+</button>
+</li>
+      
+  </ul>
+</div>
+
+
+
+
+<button onclick="toggleFullScreen()"
+  class="btn btn-sm btn-fullscreen-button"
+  title="Fullscreen mode"
+  data-bs-placement="bottom" data-bs-toggle="tooltip"
+>
+  
+
+<span class="btn__icon-container">
+  <i class="fas fa-expand"></i>
+  </span>
+
+</button>
+
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm nav-link pst-navbar-icon theme-switch-button" title="light/dark" aria-label="light/dark" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="theme-switch fa-solid fa-sun fa-lg" data-mode="light"></i>
+    <i class="theme-switch fa-solid fa-moon fa-lg" data-mode="dark"></i>
+    <i class="theme-switch fa-solid fa-circle-half-stroke fa-lg" data-mode="auto"></i>
+  </button>
+`);
+</script>
+
+
+<script>
+document.write(`
+  <button class="btn btn-sm pst-navbar-icon search-button search-button__button" title="Search" aria-label="Search" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <i class="fa-solid fa-magnifying-glass fa-lg"></i>
+  </button>
+`);
+</script>
+<button class="sidebar-toggle secondary-toggle btn btn-sm" title="Toggle secondary sidebar" data-bs-placement="bottom" data-bs-toggle="tooltip">
+    <span class="fa-solid fa-list"></span>
+</button>
+</div></div>
+      
+    </div>
+  
+</div>
+</div>
+              
+              
+
+<div id="jb-print-docs-body" class="onlyprint">
+    <h1>Deteksi Outlier dengan K-Nearest Neighbors (KNN) dalam Data Understanding</h1>
+    <!-- Table of contents -->
+    <div id="print-main-content">
+        <div id="jb-print-toc">
+            
+            <div>
+                <h2> Contents </h2>
+            </div>
+            <nav aria-label="Page">
+                <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengapa-knn-bisa-digunakan-untuk-deteksi-outlier">1. Mengapa KNN Bisa Digunakan untuk Deteksi Outlier?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deteksi-outlier-dengan-knn">2. Langkah-Langkah Deteksi Outlier dengan KNN</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
+</ul>
+            </nav>
+        </div>
+    </div>
+</div>
+
+              
+                
+<div id="searchbox"></div>
+                <article class="bd-article">
+                  
+  <section class="tex2jax_ignore mathjax_ignore" id="deteksi-outlier-dengan-k-nearest-neighbors-knn-dalam-data-understanding">
+<h1><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong><a class="headerlink" href="#deteksi-outlier-dengan-k-nearest-neighbors-knn-dalam-data-understanding" title="Link to this heading">#</a></h1>
+<p>Deteksi outlier merupakan langkah penting dalam tahap pemahaman data (Data Understanding) karena outlier dapat memengaruhi hasil analisis dan pengambilan keputusan. Salah satu metode yang dapat digunakan untuk mendeteksi outlier adalah K-Nearest Neighbors (KNN). KNN merupakan algoritma berbasis kedekatan atau kemiripan antar data, di mana suatu titik data dinilai berdasarkan jaraknya terhadap sejumlah tetangga terdekat (k-nearest neighbors). Jika sebuah titik data memiliki jarak yang jauh dibandingkan dengan mayoritas data lainnya, maka titik tersebut berpotensi sebagai outlier.</p>
+<p>Dalam konteks deteksi outlier, KNN bekerja dengan menghitung jarak antara setiap titik data dan k tetangga terdekatnya. Biasanya, digunakan metrik seperti Euclidean distance atau Manhattan distance untuk mengukur kedekatan antar titik. Jika rata-rata jarak suatu titik data ke k tetangga terdekatnya jauh lebih besar dibandingkan dengan mayoritas data lainnya, maka titik tersebut dapat dikategorikan sebagai outlier. Teknik ini sering digunakan dalam berbagai bidang seperti deteksi anomali dalam data keuangan, analisis pola perilaku, serta identifikasi kesalahan dalam pengumpulan data.</p>
+<p>Keunggulan metode KNN dalam deteksi outlier adalah fleksibilitasnya dalam menangani berbagai jenis data, baik yang berskala kecil maupun besar. Selain itu, KNN tidak mengasumsikan distribusi tertentu dalam data, sehingga dapat digunakan dalam berbagai skenario. Namun, KNN juga memiliki kelemahan, yaitu kepekaannya terhadap pemilihan parameter k dan kompleksitas komputasi yang cukup tinggi, terutama pada dataset berukuran besar. Oleh karena itu, dalam praktiknya, pemilihan parameter k yang optimal dan efisiensi dalam komputasi menjadi aspek penting dalam penerapan metode ini untuk deteksi outlier.</p>
+<section id="mengapa-knn-bisa-digunakan-untuk-deteksi-outlier">
+<h2>1. Mengapa KNN Bisa Digunakan untuk Deteksi Outlier?<a class="headerlink" href="#mengapa-knn-bisa-digunakan-untuk-deteksi-outlier" title="Link to this heading">#</a></h2>
+<p>K-Nearest Neighbors (KNN) dapat digunakan untuk deteksi outlier karena prinsip dasarnya yang mengukur kedekatan suatu titik data terhadap tetangga-tetangganya. Berikut beberapa alasan utama mengapa KNN efektif dalam mendeteksi outlier:</p>
+<ul class="simple">
+<li><p>Mengukur Jarak Antar Titik Data
+KNN menggunakan metrik jarak seperti Euclidean distance atau Manhattan distance untuk menentukan seberapa dekat satu titik dengan titik-titik lainnya. Jika suatu titik memiliki jarak yang jauh dari mayoritas titik lain dalam dataset, maka titik tersebut dapat dianggap sebagai outlier.</p></li>
+<li><p>Membandingkan dengan K Tetangga Terdekat
+Dalam deteksi outlier, KNN menghitung rata-rata jarak antara titik data dengan k tetangga terdekatnya. Jika rata-rata jarak ini jauh lebih besar dibandingkan dengan kebanyakan titik data lainnya, maka titik tersebut berpotensi sebagai outlier. Hal ini karena outlier cenderung berada jauh dari kelompok utama data.</p></li>
+<li><p>Tidak Bergantung pada Distribusi Data
+Berbeda dengan metode statistik klasik seperti Z-score atau IQR yang mengasumsikan distribusi data tertentu (misalnya normal), KNN tidak memerlukan asumsi distribusi. Oleh karena itu, metode ini lebih fleksibel dan dapat digunakan pada berbagai jenis dataset.</p></li>
+<li><p>Bisa Digunakan dalam Data Berdimensi Tinggi
+KNN mampu menangani data berdimensi tinggi dengan cukup baik, meskipun perlu dioptimalkan untuk menghindari masalah curse of dimensionality. Dalam data multidimensi, outlier tetap dapat diidentifikasi dengan cara menghitung jarak dalam ruang berdimensi tinggi.</p></li>
+<li><p>Dapat Digunakan dalam Mode Unsupervised
+KNN tidak memerlukan label dalam mendeteksi outlier, sehingga dapat digunakan dalam metode unsupervised learning. Ini sangat berguna dalam skenario di mana tidak ada informasi sebelumnya tentang mana data yang normal dan mana yang outlier.</p></li>
+</ul>
+</section>
+<section id="langkah-langkah-deteksi-outlier-dengan-knn">
+<h2>2. Langkah-Langkah Deteksi Outlier dengan KNN<a class="headerlink" href="#langkah-langkah-deteksi-outlier-dengan-knn" title="Link to this heading">#</a></h2>
+<p>Berikut langkah-langkah deteksi outlier menggunakan K-Nearest Neighbors (KNN) secara singkat:</p>
+<ul class="simple">
+<li><p>Persiapan Data – Kumpulkan dan bersihkan data, termasuk menangani nilai yang hilang dan normalisasi jika diperlukan.</p></li>
+<li><p>Menentukan Parameter K – Pilih jumlah tetangga terdekat (k). Nilai k yang terlalu kecil atau besar dapat mempengaruhi hasil deteksi outlier.</p></li>
+<li><p>Menghitung Jarak Antar Titik Data – Gunakan metrik jarak seperti Euclidean distance atau Manhattan distance untuk mengukur kedekatan antar titik.</p></li>
+<li><p>Menentukan Skor Outlier – Hitung rata-rata atau maksimum jarak suatu titik ke k tetangga terdekatnya. Titik dengan jarak yang jauh dari tetangga-tetangganya memiliki skor outlier yang lebih tinggi.</p></li>
+<li><p>Menetapkan Threshold – Tentukan ambang batas untuk mengklasifikasikan titik sebagai outlier. Misalnya, titik dengan skor jarak tertinggi (misalnya di atas persentil tertentu) dianggap sebagai outlier.</p></li>
+<li><p>Visualisasi dan Evaluasi – Gunakan grafik seperti scatter plot atau histogram untuk memahami distribusi outlier, serta evaluasi dengan metode lain jika diperlukan.</p></li>
+<li><p>Penanganan Outlier – Putuskan apakah outlier akan dihapus, dikoreksi, atau dipertimbangkan lebih lanjut berdasarkan konteks analisis.</p></li>
+</ul>
+</section>
+<section id="kesimpulan">
+<h2>Kesimpulan<a class="headerlink" href="#kesimpulan" title="Link to this heading">#</a></h2>
+<p>Deteksi outlier dengan K-Nearest Neighbors (KNN) merupakan metode yang efektif karena berbasis pada jarak antar titik data dan tidak memerlukan asumsi distribusi tertentu. Dengan menghitung kedekatan suatu titik terhadap k tetangga terdekatnya, KNN dapat mengidentifikasi anomali dalam dataset dengan cukup akurat. Proses deteksi melibatkan pemilihan parameter k, perhitungan jarak, serta penetapan threshold untuk menentukan outlier.</p>
+<p>Meskipun memiliki keunggulan dalam fleksibilitas dan kemampuan menangani data berdimensi tinggi, KNN juga memiliki keterbatasan seperti kompleksitas komputasi yang tinggi pada dataset besar dan sensitivitas terhadap pemilihan nilai k. Oleh karena itu, metode ini sering digunakan bersama teknik lain atau dengan optimasi agar hasil deteksi outlier lebih optimal.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="o">%</span><span class="k">pip</span> install pymysql
+<span class="o">%</span><span class="k">pip</span> install psycopg2
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: pymysql in /usr/local/python/3.12.1/lib/python3.12/site-packages (1.1.1)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">[</span><span class=" -Color -Color-Blue">notice</span><span class=" -Color -Color-Bold">]</span> A new release of pip is available: <span class=" -Color -Color-Red">24.3.1</span> -&gt; <span class=" -Color -Color-Green">25.0.1</span>
+<span class=" -Color -Color-Bold">[</span><span class=" -Color -Color-Blue">notice</span><span class=" -Color -Color-Bold">]</span> To update, run: <span class=" -Color -Color-Green">python3 -m pip install --upgrade pip</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Note: you may need to restart the kernel to use updated packages.
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Requirement already satisfied: psycopg2 in /usr/local/python/3.12.1/lib/python3.12/site-packages (2.9.10)
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span><span class=" -Color -Color-Bold">[</span><span class=" -Color -Color-Blue">notice</span><span class=" -Color -Color-Bold">]</span> A new release of pip is available: <span class=" -Color -Color-Red">24.3.1</span> -&gt; <span class=" -Color -Color-Green">25.0.1</span>
+<span class=" -Color -Color-Bold">[</span><span class=" -Color -Color-Blue">notice</span><span class=" -Color -Color-Bold">]</span> To update, run: <span class=" -Color -Color-Green">python3 -m pip install --upgrade pip</span>
+</pre></div>
+</div>
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span>Note: you may need to restart the kernel to use updated packages.
+</pre></div>
+</div>
+</div>
+</div>
+<p>Kode diatas digunakan untuk menginstal Python, yaitu <code class="docutils literal notranslate"><span class="pre">pymysql</span></code> dan <code class="docutils literal notranslate"><span class="pre">psycopg2</span></code>, yang berfungsi sebagai konektor untuk basis data (database). Pustaka <code class="docutils literal notranslate"><span class="pre">pymysql</span></code> digunakan untuk menghubungkan aplikasi Python dengan database MySQL atau MariaDB menggunakan protokol MySQL asli. Sementara itu, <code class="docutils literal notranslate"><span class="pre">psycopg2</span></code> merupakan pustaka yang digunakan untuk menghubungkan Python dengan database PostgreSQL, menyediakan antarmuka yang efisien untuk menjalankan perintah SQL dan berinteraksi dengan database tersebut. Kedua perintah ini menggunakan <strong>magic command</strong> <code class="docutils literal notranslate"><span class="pre">%pip</span></code>, yang umumnya digunakan dalam lingkungan Jupyter Notebook untuk memastikan bahwa paket yang diperlukan diinstal dalam kernel yang sedang berjalan.</p>
+<div class="cell docutils container">
+<div class="cell_input docutils container">
+<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">psycopg2</span>
+<span class="kn">import</span> <span class="nn">pymysql</span>
+<span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
+<span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
+<span class="kn">import</span> <span class="nn">seaborn</span> <span class="k">as</span> <span class="nn">sns</span>
+<span class="kn">import</span> <span class="nn">matplotlib.pyplot</span> <span class="k">as</span> <span class="nn">plt</span>
+<span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">NearestNeighbors</span>
+
+<span class="k">def</span> <span class="nf">get_pg_data</span><span class="p">():</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">psycopg2</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+        <span class="n">host</span><span class="o">=</span><span class="s2">&quot;pg-138e7d50-postgresqllll.d.aivencloud.com&quot;</span><span class="p">,</span>
+        <span class="n">user</span><span class="o">=</span><span class="s2">&quot;avnadmin&quot;</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;AVNS_hUJVkoNFS0qvBDXnrxU&quot;</span><span class="p">,</span>
+        <span class="n">database</span><span class="o">=</span><span class="s2">&quot;defaultdb&quot;</span><span class="p">,</span>
+        <span class="n">port</span><span class="o">=</span><span class="mi">10802</span>
+    <span class="p">)</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s1">&#39;SELECT * FROM  &quot;Naufal&quot;.&quot;postgree&quot;&#39;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">desc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">description</span><span class="p">]</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="k">def</span> <span class="nf">get_mysql_data</span><span class="p">():</span>
+    <span class="n">conn</span> <span class="o">=</span> <span class="n">pymysql</span><span class="o">.</span><span class="n">connect</span><span class="p">(</span>
+        <span class="n">host</span><span class="o">=</span><span class="s2">&quot;mysql-2386dab1-myysqll.d.aivencloud.com&quot;</span><span class="p">,</span>
+        <span class="n">user</span><span class="o">=</span><span class="s2">&quot;avnadmin&quot;</span><span class="p">,</span>
+        <span class="n">password</span><span class="o">=</span><span class="s2">&quot;AVNS_bZVPOBZt5yW-M1GcqrS&quot;</span><span class="p">,</span>
+        <span class="n">database</span><span class="o">=</span><span class="s2">&quot;defaultdb&quot;</span><span class="p">,</span>
+        <span class="n">port</span><span class="o">=</span><span class="mi">22065</span>
+    <span class="p">)</span>
+    <span class="n">cursor</span> <span class="o">=</span> <span class="n">conn</span><span class="o">.</span><span class="n">cursor</span><span class="p">()</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">execute</span><span class="p">(</span><span class="s2">&quot;SELECT * FROM flowers&quot;</span><span class="p">)</span>
+    <span class="n">data</span> <span class="o">=</span> <span class="n">cursor</span><span class="o">.</span><span class="n">fetchall</span><span class="p">()</span>
+    <span class="n">columns</span> <span class="o">=</span> <span class="p">[</span><span class="n">desc</span><span class="p">[</span><span class="mi">0</span><span class="p">]</span> <span class="k">for</span> <span class="n">desc</span> <span class="ow">in</span> <span class="n">cursor</span><span class="o">.</span><span class="n">description</span><span class="p">]</span>
+    <span class="n">cursor</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="n">conn</span><span class="o">.</span><span class="n">close</span><span class="p">()</span>
+    <span class="k">return</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">columns</span><span class="o">=</span><span class="n">columns</span><span class="p">)</span>
+
+<span class="c1"># Ambil data dari kedua database</span>
+<span class="n">df_postgresql</span> <span class="o">=</span> <span class="n">get_pg_data</span><span class="p">()</span>
+<span class="n">df_mysql</span> <span class="o">=</span> <span class="n">get_mysql_data</span><span class="p">()</span>
+<span class="n">df_postgresql</span> <span class="o">=</span> <span class="n">df_postgresql</span><span class="o">.</span><span class="n">rename</span><span class="p">(</span><span class="n">columns</span><span class="o">=</span><span class="p">{</span><span class="s1">&#39;Class&#39;</span><span class="p">:</span> <span class="s1">&#39;class&#39;</span><span class="p">})</span>
+
+<span class="c1"># Gabungkan berdasarkan kolom &#39;id&#39;</span>
+<span class="n">df_merged</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">merge</span><span class="p">(</span><span class="n">df_mysql</span><span class="p">,</span> <span class="n">df_postgresql</span><span class="p">,</span> <span class="n">on</span><span class="o">=</span><span class="p">[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">],</span> <span class="n">how</span><span class="o">=</span><span class="s2">&quot;inner&quot;</span><span class="p">)</span>
+
+<span class="c1"># Ambil data fitur numerik</span>
+<span class="n">feature_columns</span> <span class="o">=</span> <span class="p">[</span><span class="s2">&quot;petal length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal width&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal width&quot;</span><span class="p">]</span>
+<span class="n">data_values</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="n">feature_columns</span><span class="p">]</span><span class="o">.</span><span class="n">values</span>
+
+<span class="c1"># KNN Outlier Detection</span>
+<span class="k">def</span> <span class="nf">knn_outlier_detection</span><span class="p">(</span><span class="n">data</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">):</span>
+    <span class="n">neigh</span> <span class="o">=</span> <span class="n">NearestNeighbors</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="n">k</span><span class="p">)</span>
+    <span class="n">neigh</span><span class="o">.</span><span class="n">fit</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">distances</span><span class="p">,</span> <span class="n">_</span> <span class="o">=</span> <span class="n">neigh</span><span class="o">.</span><span class="n">kneighbors</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
+    <span class="n">avg_distances</span> <span class="o">=</span> <span class="n">distances</span><span class="p">[:,</span> <span class="o">-</span><span class="mi">1</span><span class="p">]</span>  <span class="c1"># Ambil jarak k-terjauh sebagai skor</span>
+    <span class="k">return</span> <span class="n">avg_distances</span>
+
+<span class="c1"># Hitung K-NN distance</span>
+<span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;knn_distance&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">knn_outlier_detection</span><span class="p">(</span><span class="n">data_values</span><span class="p">,</span> <span class="n">k</span><span class="o">=</span><span class="mi">5</span><span class="p">)</span>
+
+<span class="c1"># Tentukan threshold sebagai nilai rata-rata + 2 standar deviasi</span>
+<span class="n">threshold</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;knn_distance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">mean</span><span class="p">()</span> <span class="o">+</span> <span class="mi">2</span> <span class="o">*</span> <span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;knn_distance&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">std</span><span class="p">()</span>
+<span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;outlier_knn&quot;</span><span class="p">]</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;knn_distance&quot;</span><span class="p">]</span> <span class="o">&gt;</span> <span class="n">threshold</span>
+
+<span class="c1"># Cetak hasil</span>
+<span class="n">df_result</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[[</span><span class="s2">&quot;id&quot;</span><span class="p">,</span> <span class="s2">&quot;class&quot;</span><span class="p">,</span> <span class="s2">&quot;petal length&quot;</span><span class="p">,</span> <span class="s2">&quot;petal width&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal length&quot;</span><span class="p">,</span> <span class="s2">&quot;sepal width&quot;</span><span class="p">,</span> <span class="s2">&quot;knn_distance&quot;</span><span class="p">,</span> <span class="s2">&quot;outlier_knn&quot;</span><span class="p">]]</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">df_result</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+<span class="n">num_outliers</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;outlier_knn&quot;</span><span class="p">]</span><span class="o">.</span><span class="n">sum</span><span class="p">()</span>
+<span class="nb">print</span><span class="p">(</span><span class="sa">f</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Jumlah outlier: </span><span class="si">{</span><span class="n">num_outliers</span><span class="si">}</span><span class="s2">&quot;</span><span class="p">)</span>
+
+<span class="c1"># Cetak data outlier</span>
+<span class="n">outliers</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;outlier_knn&quot;</span><span class="p">]]</span>
+<span class="nb">print</span><span class="p">(</span><span class="s2">&quot;</span><span class="se">\n</span><span class="s2">Data Outlier:&quot;</span><span class="p">)</span>
+<span class="nb">print</span><span class="p">(</span><span class="n">outliers</span><span class="o">.</span><span class="n">to_string</span><span class="p">(</span><span class="n">index</span><span class="o">=</span><span class="kc">False</span><span class="p">))</span>
+
+<span class="c1"># Visualisasi outlier berdasarkan K-NN</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;sepal length&quot;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;sepal width&quot;</span><span class="p">],</span>
+    <span class="n">hue</span><span class="o">=</span><span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;outlier_knn&quot;</span><span class="p">],</span> <span class="n">palette</span><span class="o">=</span><span class="p">{</span><span class="kc">False</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Outlier Detection (Sepal) - KNN&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+
+<span class="n">plt</span><span class="o">.</span><span class="n">figure</span><span class="p">(</span><span class="n">figsize</span><span class="o">=</span><span class="p">(</span><span class="mi">8</span><span class="p">,</span> <span class="mi">6</span><span class="p">))</span>
+<span class="n">sns</span><span class="o">.</span><span class="n">scatterplot</span><span class="p">(</span>
+    <span class="n">x</span><span class="o">=</span><span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;petal length&quot;</span><span class="p">],</span> <span class="n">y</span><span class="o">=</span><span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;petal width&quot;</span><span class="p">],</span>
+    <span class="n">hue</span><span class="o">=</span><span class="n">df_merged</span><span class="p">[</span><span class="s2">&quot;outlier_knn&quot;</span><span class="p">],</span> <span class="n">palette</span><span class="o">=</span><span class="p">{</span><span class="kc">False</span><span class="p">:</span> <span class="s2">&quot;blue&quot;</span><span class="p">,</span> <span class="kc">True</span><span class="p">:</span> <span class="s2">&quot;red&quot;</span><span class="p">}</span>
+<span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">title</span><span class="p">(</span><span class="s2">&quot;Outlier Detection (Petal) - KNN&quot;</span><span class="p">)</span>
+<span class="n">plt</span><span class="o">.</span><span class="n">show</span><span class="p">()</span>
+</pre></div>
+</div>
+</div>
+<div class="cell_output docutils container">
+<div class="output stream highlight-myst-ansi notranslate"><div class="highlight"><pre><span></span> id           class  petal length  petal width  sepal length  sepal width  knn_distance  outlier_knn
+  1     Iris-setosa           1.4          0.2           5.1          3.5      0.141421        False
+  2     Iris-setosa          14.0          2.0          40.9         30.0     43.517123         True
+  3     Iris-setosa           1.3          0.2           4.7          3.2      0.264575        False
+  4     Iris-setosa           1.5          0.2           4.6          3.1      0.244949        False
+  5     Iris-setosa           1.4          0.2           5.0          3.6      0.223607        False
+  6     Iris-setosa           1.7          0.4           5.4          3.9      0.374166        False
+  7     Iris-setosa           1.4          0.3           4.6          3.4      0.316228        False
+  8     Iris-setosa           1.5          0.2           5.0          3.4      0.200000        False
+  9     Iris-setosa           1.4          0.2           4.4          2.9      0.346410        False
+ 10     Iris-setosa           1.5          0.1           4.9          3.1      0.173205        False
+ 11     Iris-setosa           1.5          0.2           5.4          3.7      0.331662        False
+ 12     Iris-setosa           1.6          0.2           4.8          3.4      0.300000        False
+ 13     Iris-setosa           1.4          0.1           4.8          3.0      0.200000        False
+ 14     Iris-setosa           1.1          0.1           4.3          3.0      0.479583        False
+ 15     Iris-setosa           1.2          0.2           5.8          4.0      0.556776        False
+ 16     Iris-setosa           1.5          0.4           5.7          4.4      0.616441        False
+ 17     Iris-setosa           1.3          0.4           5.4          3.9      0.387298        False
+ 18     Iris-setosa           1.4          0.3           5.1          3.5      0.173205        False
+ 19     Iris-setosa           1.7          0.3           5.7          3.8      0.509902        False
+ 20     Iris-setosa           1.5          0.3           5.1          3.8      0.264575        False
+ 21     Iris-setosa           1.7          0.2           5.4          3.4      0.360555        False
+ 22     Iris-setosa           1.5          0.4           5.1          3.7      0.264575        False
+ 23     Iris-setosa           1.0          0.2           4.6          3.6      0.538516        False
+ 24     Iris-setosa           1.7          0.5           5.1          3.3      0.387298        False
+ 25     Iris-setosa           1.9          0.2           4.8          3.4      0.424264        False
+ 26     Iris-setosa           1.6          0.2           5.0          3.0      0.223607        False
+ 27     Iris-setosa           1.6          0.4           5.0          3.4      0.244949        False
+ 28     Iris-setosa           1.5          0.2           5.2          3.5      0.173205        False
+ 29     Iris-setosa           1.4          0.2           5.2          3.4      0.173205        False
+ 30     Iris-setosa           1.6          0.2           4.7          3.2      0.223607        False
+ 31     Iris-setosa           1.6          0.2           4.8          3.1      0.173205        False
+ 32     Iris-setosa           1.5          0.4           5.4          3.4      0.316228        False
+ 33     Iris-setosa           1.5          0.1           5.2          4.1      0.424264        False
+ 34     Iris-setosa           1.4          0.2           5.5          4.2      0.412311        False
+ 35     Iris-setosa           1.5          0.1           4.9          3.1      0.173205        False
+ 36     Iris-setosa           1.2          0.2           5.0          3.2      0.346410        False
+ 37     Iris-setosa           1.3          0.2           5.5          3.5      0.346410        False
+ 38     Iris-setosa           1.5          0.1           4.9          3.1      0.173205        False
+ 39     Iris-setosa           1.3          0.2           4.4          3.0      0.300000        False
+ 40     Iris-setosa           1.5          0.2           5.1          3.4      0.141421        False
+ 41     Iris-setosa           1.3          0.3           5.0          3.5      0.244949        False
+ 42     Iris-setosa           1.3          0.3           4.5          2.3      0.781025        False
+ 43     Iris-setosa           1.3          0.2           4.4          3.2      0.300000        False
+ 44     Iris-setosa           1.6          0.6           5.0          3.5      0.374166        False
+ 45     Iris-setosa           1.9          0.4           5.1          3.8      0.412311        False
+ 46     Iris-setosa           1.4          0.3           4.8          3.0      0.264575        False
+ 47     Iris-setosa           1.6          0.2           5.1          3.8      0.300000        False
+ 48     Iris-setosa           1.4          0.2           4.6          3.2      0.223607        False
+ 49     Iris-setosa           1.5          0.2           5.3          3.7      0.244949        False
+ 50     Iris-setosa           1.4          0.2           5.0          3.3      0.223607        False
+ 51 Iris-versicolor           4.7          1.4           7.0          3.2      0.458258        False
+ 52 Iris-versicolor           4.5          1.5           6.4          3.2      0.374166        False
+ 53 Iris-versicolor           4.9          1.5           6.9          3.1      0.346410        False
+ 54 Iris-versicolor           4.0          1.3           5.5          2.3      0.435890        False
+ 55 Iris-versicolor           4.6          1.5           6.5          2.8      0.374166        False
+ 56 Iris-versicolor           4.5          1.3           5.7          2.8      0.331662        False
+ 57 Iris-versicolor           4.7          1.6           6.3          3.3      0.458258        False
+ 58 Iris-versicolor           3.3          1.0           4.9          2.4      0.721110        False
+ 59 Iris-versicolor           4.6          1.3           6.6          2.9      0.316228        False
+ 60 Iris-versicolor           3.9          1.4           5.2          2.7      0.529150        False
+ 61 Iris-versicolor           3.5          1.0           5.0          2.0      0.714143        False
+ 62 Iris-versicolor           4.2          1.5           5.9          3.0      0.360555        False
+ 63 Iris-versicolor           4.0          1.0           6.0          2.2      0.583095        False
+ 64 Iris-versicolor           4.7          1.4           6.1          2.9      0.424264        False
+ 65 Iris-versicolor           3.6          1.3           5.6          2.9      0.519615        False
+ 66 Iris-versicolor           4.4          1.4           6.7          3.1      0.346410        False
+ 67 Iris-versicolor           4.5          1.5           5.6          3.0      0.412311        False
+ 68 Iris-versicolor           4.1          1.0           5.8          2.7      0.360555        False
+ 69 Iris-versicolor           4.5          1.5           6.2          2.2      0.678233        False
+ 70 Iris-versicolor           3.9          1.1           5.6          2.5      0.264575        False
+ 71 Iris-versicolor           4.8          1.8           5.9          3.2      0.424264        False
+ 72 Iris-versicolor           4.0          1.3           6.1          2.8      0.400000        False
+ 73 Iris-versicolor           4.9          1.5           6.3          2.5      0.424264        False
+ 74 Iris-versicolor           4.7          1.2           6.1          2.8      0.435890        False
+ 75 Iris-versicolor           4.3          1.3           6.4          2.9      0.387298        False
+ 76 Iris-versicolor           4.4          1.4           6.6          3.0      0.316228        False
+ 77 Iris-versicolor           4.8          1.4           6.8          2.8      0.374166        False
+ 78 Iris-versicolor           5.0          1.7           6.7          3.0      0.424264        False
+ 79 Iris-versicolor           4.5          1.5           6.0          2.9      0.346410        False
+ 80 Iris-versicolor           3.5          1.0           5.7          2.6      0.447214        False
+ 81 Iris-versicolor           3.8          1.1           5.5          2.4      0.300000        False
+ 82 Iris-versicolor           3.7          1.0           5.5          2.4      0.435890        False
+ 83 Iris-versicolor           3.9          1.2           5.8          2.7      0.300000        False
+ 84 Iris-versicolor           5.1          1.6           6.0          2.7      0.374166        False
+ 85 Iris-versicolor           4.5          1.5           5.4          3.0      0.489898        False
+ 86 Iris-versicolor           4.5          1.6           6.0          3.4      0.469042        False
+ 87 Iris-versicolor           4.7          1.5           6.7          3.1      0.331662        False
+ 88 Iris-versicolor           4.4          1.3           6.3          2.3      0.608276        False
+ 89 Iris-versicolor           4.1          1.3           5.6          3.0      0.316228        False
+ 90 Iris-versicolor           4.0          1.3           5.5          2.5      0.300000        False
+ 91 Iris-versicolor           4.4          1.2           5.5          2.6      0.424264        False
+ 92 Iris-versicolor           4.6          1.4           6.1          3.0      0.346410        False
+ 93 Iris-versicolor           4.0          1.2           5.8          2.6      0.264575        False
+ 94 Iris-versicolor           3.3          1.0           5.0          2.3      0.648074        False
+ 95 Iris-versicolor           4.2          1.3           5.6          2.7      0.300000        False
+ 96 Iris-versicolor           4.2          1.2           5.7          3.0      0.331662        False
+ 97 Iris-versicolor           4.2          1.3           5.7          2.9      0.223607        False
+ 98 Iris-versicolor           4.3          1.3           6.2          2.9      0.346410        False
+ 99 Iris-versicolor           3.0          1.1           5.1          2.5      0.793725        False
+100 Iris-versicolor           4.1          1.3           5.7          2.8      0.244949        False
+101  Iris-virginica           6.0          2.5           6.3          3.3      0.556776        False
+102  Iris-virginica           5.1          1.9           5.8          2.7      0.331662        False
+103  Iris-virginica           5.9          2.1           7.1          3.0      0.458258        False
+104  Iris-virginica           5.6          1.8           6.3          2.9      0.387298        False
+105  Iris-virginica           5.8          2.2           6.5          3.0      0.387298        False
+106  Iris-virginica           6.6          2.1           7.6          3.0      0.547723        False
+107  Iris-virginica           4.5          1.7           4.9          2.5      0.877496        False
+108  Iris-virginica           6.3          1.8           7.3          2.9      0.547723        False
+109  Iris-virginica           5.8          1.8           6.7          2.5      0.616441        False
+110  Iris-virginica           6.1          2.5           7.2          3.6      0.754983        False
+111  Iris-virginica           5.1          2.0           6.5          3.2      0.424264        False
+112  Iris-virginica           5.3          1.9           6.4          2.7      0.387298        False
+113  Iris-virginica           5.5          2.1           6.8          3.0      0.374166        False
+114  Iris-virginica           5.0          2.0           5.7          2.5      0.519615        False
+115  Iris-virginica           5.1          2.4           5.8          2.8      0.519615        False
+116  Iris-virginica           5.3          2.3           6.4          3.2      0.387298        False
+117  Iris-virginica           5.5          1.8           6.5          3.0      0.387298        False
+118  Iris-virginica           6.7          2.2           7.7          3.8      1.004988        False
+119  Iris-virginica           6.9          2.3           7.7          2.6      0.927362        False
+120  Iris-virginica           5.0          1.5           6.0          2.2      0.583095        False
+121  Iris-virginica           5.7          2.3           6.9          3.2      0.300000        False
+122  Iris-virginica           4.9          2.0           5.6          2.8      0.458258        False
+123  Iris-virginica           6.7          2.0           7.7          2.8      0.678233        False
+124  Iris-virginica           4.9          1.8           6.3          2.7      0.360555        False
+125  Iris-virginica           5.7          2.1           6.7          3.3      0.374166        False
+126  Iris-virginica           6.0          1.8           7.2          3.2      0.469042        False
+127  Iris-virginica           4.8          1.8           6.2          2.8      0.387298        False
+128  Iris-virginica           4.9          1.8           6.1          3.0      0.300000        False
+129  Iris-virginica           5.6          2.1           6.4          2.8      0.374166        False
+130  Iris-virginica           5.8          1.6           7.2          3.0      0.556776        False
+131  Iris-virginica           6.1          1.9           7.4          2.8      0.509902        False
+132  Iris-virginica           6.4          2.0           7.9          3.8      0.932738        False
+133  Iris-virginica           5.6          2.2           6.4          2.8      0.435890        False
+134  Iris-virginica           5.1          1.5           6.3          2.8      0.435890        False
+135  Iris-virginica           5.6          1.4           6.1          2.6      0.663325        False
+136  Iris-virginica           6.1          2.3           7.7          3.0      0.678233        False
+137  Iris-virginica           5.6          2.4           6.3          3.4      0.435890        False
+138  Iris-virginica           5.5          1.8           6.4          3.1      0.435890        False
+139  Iris-virginica           4.8          1.8           6.0          3.0      0.316228        False
+140  Iris-virginica           5.4          2.1           6.9          3.1      0.374166        False
+141  Iris-virginica           5.6          2.4           6.7          3.1      0.346410        False
+142  Iris-virginica           5.1          2.3           6.9          3.1      0.509902        False
+143  Iris-virginica           5.1          1.9           5.8          2.7      0.331662        False
+144  Iris-virginica           5.9          2.3           6.8          3.2      0.346410        False
+145  Iris-virginica           5.7          2.5           6.7          3.3      0.400000        False
+146  Iris-virginica           5.2          2.3           6.7          3.0      0.374166        False
+147  Iris-virginica           5.0          1.9           6.3          2.5      0.412311        False
+148  Iris-virginica           5.2          2.0           6.5          3.0      0.360555        False
+149  Iris-virginica           5.4          2.3           6.2          3.4      0.616441        False
+150  Iris-virginica           5.1          1.8           5.9          3.0      0.331662        False
+151             ???           5.1          3.2           5.8          1.0      2.092845        False
+
+Jumlah outlier: 1
+
+Data Outlier:
+ id       class  petal length  petal width  sepal length  sepal width  knn_distance  outlier_knn
+  2 Iris-setosa          14.0          2.0          40.9         30.0     43.517123         True
+</pre></div>
+</div>
+<img alt="_images/90d9e45b5f9bd6bc702606d7d4096bf7e7feccb3e11e4622661aa038a6fad050.png" src="_images/90d9e45b5f9bd6bc702606d7d4096bf7e7feccb3e11e4622661aa038a6fad050.png" />
+<img alt="_images/32086cc3bbcba0d8552d74a48a522b1f2ce5f186e3d64c4cd8e0900e85543a40.png" src="_images/32086cc3bbcba0d8552d74a48a522b1f2ce5f186e3d64c4cd8e0900e85543a40.png" />
+</div>
+</div>
+<p>Kode di atas melakukan deteksi outlier menggunakan metode K-Nearest Neighbors (KNN) pada data yang diambil dari dua database yang berbeda, yaitu PostgreSQL dan MySQL. Secara umum, proses deteksi outlier ini dimulai dengan pengambilan data dari kedua sumber tersebut, yang kemudian digabungkan berdasarkan kolom ‘id’ dan ‘class’. Setelah data berhasil digabungkan, kode ini mengekstrak fitur numerik yang terdiri dari panjang dan lebar petal, serta panjang dan lebar sepal sebagai variabel untuk analisis lebih lanjut.</p>
+<p>Metode KNN yang digunakan dalam deteksi outlier bekerja dengan mengukur kedekatan data point (titik data) dengan data lainnya dalam ruang fitur (dalam hal ini, fitur-fitur seperti panjang petal, lebar petal, dll.). Fungsi knn_outlier_detection yang didefinisikan di dalam kode ini menggunakan algoritma KNN untuk mencari jarak antara setiap data dengan titik data terdekat lainnya, di mana k = 5 yang berarti akan mencari lima tetangga terdekat. Jarak terjauh dari lima tetangga ini diambil sebagai nilai skor jarak untuk setiap titik data. Skor jarak ini kemudian digunakan untuk menentukan apakah suatu titik data merupakan outlier atau tidak.</p>
+</section>
+</section>
+
+    <script type="text/x-thebe-config">
+    {
+        requestKernel: true,
+        binderOptions: {
+            repo: "binder-examples/jupyter-stacks-datascience",
+            ref: "master",
+        },
+        codeMirrorConfig: {
+            theme: "abcdef",
+            mode: "python"
+        },
+        kernelOptions: {
+            name: "python3",
+            path: "./."
+        },
+        predefinedOutput: true
+    }
+    </script>
+    <script>kernelName = 'python3'</script>
+
+                </article>
+              
+
+              
+              
+              
+              
+                <footer class="prev-next-footer d-print-none">
+                  
+<div class="prev-next-area">
+    <a class="left-prev"
+       href="Pendat2.html"
+       title="previous page">
+      <i class="fa-solid fa-angle-left"></i>
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">previous</p>
+        <p class="prev-next-title">Deteksi OutLier</p>
+      </div>
+    </a>
+    <a class="right-next"
+       href="LOF.html"
+       title="next page">
+      <div class="prev-next-info">
+        <p class="prev-next-subtitle">next</p>
+        <p class="prev-next-title"><strong>Deteksi Outlier dengan metode Local Outlier Factor (LOF) dalam Data Understanding</strong></p>
+      </div>
+      <i class="fa-solid fa-angle-right"></i>
+    </a>
+</div>
+                </footer>
+              
+            </div>
+            
+            
+              
+                <div class="bd-sidebar-secondary bd-toc"><div class="sidebar-secondary-items sidebar-secondary__inner">
+
+
+  <div class="sidebar-secondary-item">
+  <div class="page-toc tocsection onthispage">
+    <i class="fa-solid fa-list"></i> Contents
+  </div>
+  <nav class="bd-toc-nav page-toc">
+    <ul class="visible nav section-nav flex-column">
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengapa-knn-bisa-digunakan-untuk-deteksi-outlier">1. Mengapa KNN Bisa Digunakan untuk Deteksi Outlier?</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deteksi-outlier-dengan-knn">2. Langkah-Langkah Deteksi Outlier dengan KNN</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
+</ul>
+  </nav></div>
+
+</div></div>
+              
+            
+          </div>
+          <footer class="bd-footer-content">
+            
+<div class="bd-footer-content__inner container">
+  
+  <div class="footer-item">
+    
+<p class="component-author">
+By muhammad naufal (23-004)
+</p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+
+  <p class="copyright">
+    
+      © Copyright 2025.
+      <br/>
+    
+  </p>
+
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+  <div class="footer-item">
+    
+  </div>
+  
+</div>
+          </footer>
+        
+
+      </main>
+    </div>
+  </div>
+  
+  <!-- Scripts loaded after <body> so the DOM is not blocked -->
+  <script src="_static/scripts/bootstrap.js?digest=dfe6caa3a7d634c4db9b"></script>
+<script src="_static/scripts/pydata-sphinx-theme.js?digest=dfe6caa3a7d634c4db9b"></script>
+
+  <footer class="bd-footer">
+  </footer>
+  </body>
+</html>
