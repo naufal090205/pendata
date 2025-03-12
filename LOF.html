@@ -57,6 +57,8 @@
     <script async="async" src="_static/sphinx-thebe.js?v=c100c467"></script>
     <script>var togglebuttonSelector = '.toggle, .admonition.dropdown';</script>
     <script>const THEBE_JS_URL = "https://unpkg.com/thebe@0.8.2/lib/index.js"; const thebe_selector = ".thebe,.cell"; const thebe_selector_input = "pre"; const thebe_selector_output = ".output, .cell_output"</script>
+    <script>window.MathJax = {"options": {"processHtmlClass": "tex2jax_process|mathjax_process|math|output_area"}}</script>
+    <script defer="defer" src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script>
     <script>DOCUMENTATION_OPTIONS.pagename = 'LOF';</script>
     <link rel="index" title="Index" href="genindex.html" />
     <link rel="search" title="Search" href="search.html" />
@@ -422,9 +424,116 @@ document.write(`
 <h2>CONTOH MENGHITUNG MANUAL LOF<a class="headerlink" href="#contoh-menghitung-manual-lof" title="Link to this heading">#</a></h2>
 <p>Berikut adalah cara singkat menghitung <strong>Local Outlier Factor (LOF)</strong> untuk satu titik data dengan dua fitur:</p>
 <ol class="arabic simple">
-<li><p>Misalkan kita memiliki 5 titik data:
-A (2,2), B (3,3), C (5,5), D (6,6), dan E (12,12). Kita ingin mengetahui apakah titik E adalah outlier dengan LOF.</p></li>
+<li><p><strong>Dataset</strong>:<br />
+Misalkan data berikut:</p></li>
 </ol>
+<div class="pst-scrollable-table-container"><table class="table">
+<thead>
+<tr class="row-odd"><th class="head"><p>ID</p></th>
+<th class="head"><p>Feature1</p></th>
+<th class="head"><p>Feature2</p></th>
+</tr>
+</thead>
+<tbody>
+<tr class="row-even"><td><p>1</p></td>
+<td><p>1.0</p></td>
+<td><p>2.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>2</p></td>
+<td><p>2.0</p></td>
+<td><p>3.0</p></td>
+</tr>
+<tr class="row-even"><td><p>3</p></td>
+<td><p>3.0</p></td>
+<td><p>4.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>4</p></td>
+<td><p>4.0</p></td>
+<td><p>5.0</p></td>
+</tr>
+<tr class="row-even"><td><p>5</p></td>
+<td><p>5.0</p></td>
+<td><p>6.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>6</p></td>
+<td><p>10.0</p></td>
+<td><p>20.0</p></td>
+</tr>
+<tr class="row-even"><td><p>7</p></td>
+<td><p>12.0</p></td>
+<td><p>22.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>8</p></td>
+<td><p>14.0</p></td>
+<td><p>24.0</p></td>
+</tr>
+<tr class="row-even"><td><p>8</p></td>
+<td><p>3.5</p></td>
+<td><p>4.0</p></td>
+</tr>
+<tr class="row-odd"><td><p>10</p></td>
+<td><p>4.5</p></td>
+<td><p>5.5</p></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>Kita akan hitung LOF untuk <strong>titik 3</strong> (3.0, 4.0).
+K= 2</p>
+<ol class="arabic simple" start="2">
+<li><p><strong>Hitung Jarak Euclidean</strong>:<br />
+Jarak Euclidean antara titik ke-3 (3.0, 4.0) dan titik lainnya:</p></li>
+</ol>
+<ul class="simple">
+<li><p>Ke titik 4: 2.83</p></li>
+<li><p>Ke titik 6: 1.41</p></li>
+<li><p>Ke titik 3: 1.41</p></li>
+<li><p>Ke titik 7: 2.83</p></li>
+<li><p>Ke titik 2: 17.03</p></li>
+<li><p>Ke titik 8: 20.12</p></li>
+<li><p>Ke titik 1: 23.32</p></li>
+<li><p>Ke titik 9: 0.50</p></li>
+<li><p>Ke titik 10: 2.12</p></li>
+</ul>
+<ol class="arabic simple" start="3">
+<li><p><strong>Tentukan k-Tetangga Terdekat</strong> (k=2):</p></li>
+</ol>
+<ul class="simple">
+<li><p>TTitik ke-9 (3.5, 4.0) dengan jarak 0.50</p></li>
+<li><p>Titik ke-2 (2.0, 3.0) dengan jarak 1.41</p></li>
+</ul>
+<ol class="arabic simple" start="4">
+<li><p><strong>Hitung Reachability Distance</strong>:</p></li>
+</ol>
+<ul class="simple">
+<li><p>Reachability distance ke titik 4: 0.50</p></li>
+<li><p>Reachability distance ke titik 6: 1.41</p></li>
+</ul>
+<ol class="arabic" start="5">
+<li><p><strong>Hitung Local Reachability Density (LRD)</strong>:<br />
+<span class="math notranslate nohighlight">\(
+\text{LRD}(3) = \frac{1}{\frac{1}{2} \times (1.41 + 0.50)}
+\)</span></p>
+<p><span class="math notranslate nohighlight">\(
+=\frac{1}{\frac{1}{2} \times (1.91)} = 1.05
+\)</span></p>
+</li>
+<li><p><strong>Hitung LOF</strong>:<br />
+Untuk menghitung LOF(5), kita perlu LRD dari titik 4 dan 6:</p>
+<p><span class="math notranslate nohighlight">\(
+\text{LRD}(3.5 , 4.0) = 1.10
+\)</span></p>
+<p><span class="math notranslate nohighlight">\(
+\text{LDR}(2.0 , 3.0 ) = 0.95
+\)</span></p>
+<p><span class="math notranslate nohighlight">\(
+ \text{LOF}(5) = \frac{1.10}{1.05}+\frac{0.95}{1.05}=0.98
+\)</span></p>
+</li>
+<li><p><strong>Interpretasi</strong>:<br />
+Karena LOF(3) ≈ 0.98, yang mendekati 1, berarti titik (3.0, 4.0) bukan outlier.</p></li>
+</ol>
+<p>LOF mengukur seberapa terisolasi titik dibandingkan tetangganya. Titik dengan LOF lebih besar dari 1 dianggap outlier.</p>
 </section>
 <section id="langkah-langkah-perhitungan-lof">
 <h2>Langkah-langkah perhitungan LOF:<a class="headerlink" href="#langkah-langkah-perhitungan-lof" title="Link to this heading">#</a></h2>
