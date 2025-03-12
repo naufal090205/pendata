@@ -451,17 +451,17 @@ Jika LOF(E) &gt;&gt; 1, maka titik E kemungkinan adalah outlier karena memiliki 
 <span class="kn">import</span> <span class="nn">pandas</span> <span class="k">as</span> <span class="nn">pd</span>
 <span class="kn">from</span> <span class="nn">sklearn.neighbors</span> <span class="kn">import</span> <span class="n">LocalOutlierFactor</span>
 
-<span class="c1"># Dataset contoh</span>
+<span class="c1"># Dataset contoh dengan tambahan 5 data lagi</span>
 <span class="n">data</span> <span class="o">=</span> <span class="p">{</span>
-    <span class="s1">&#39;Feature1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">],</span>
-    <span class="s1">&#39;Feature2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">]</span>
+    <span class="s1">&#39;Feature1&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">1.0</span><span class="p">,</span> <span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">10.0</span><span class="p">,</span> <span class="mf">12.0</span><span class="p">,</span> <span class="mf">14.0</span><span class="p">,</span> <span class="mf">3.5</span><span class="p">,</span> <span class="mf">4.5</span><span class="p">],</span>
+    <span class="s1">&#39;Feature2&#39;</span><span class="p">:</span> <span class="p">[</span><span class="mf">2.0</span><span class="p">,</span> <span class="mf">3.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.0</span><span class="p">,</span> <span class="mf">6.0</span><span class="p">,</span> <span class="mf">20.0</span><span class="p">,</span> <span class="mf">22.0</span><span class="p">,</span> <span class="mf">24.0</span><span class="p">,</span> <span class="mf">4.0</span><span class="p">,</span> <span class="mf">5.5</span><span class="p">]</span>
 <span class="p">}</span>
 
 <span class="c1"># Membuat DataFrame</span>
 <span class="n">df</span> <span class="o">=</span> <span class="n">pd</span><span class="o">.</span><span class="n">DataFrame</span><span class="p">(</span><span class="n">data</span><span class="p">)</span>
 
-<span class="c1"># Inisialisasi model LOF dengan k=2 (2 tetangga terdekat)</span>
-<span class="n">lof</span> <span class="o">=</span> <span class="n">LocalOutlierFactor</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">2</span><span class="p">)</span>
+<span class="c1"># Inisialisasi model LOF dengan k=3 (3 tetangga terdekat untuk stabilitas lebih baik)</span>
+<span class="n">lof</span> <span class="o">=</span> <span class="n">LocalOutlierFactor</span><span class="p">(</span><span class="n">n_neighbors</span><span class="o">=</span><span class="mi">3</span><span class="p">)</span>
 
 <span class="c1"># Fit model LOF dan prediksi label (1 untuk normal, -1 untuk outlier)</span>
 <span class="n">lof_labels</span> <span class="o">=</span> <span class="n">lof</span><span class="o">.</span><span class="n">fit_predict</span><span class="p">(</span><span class="n">df</span><span class="p">)</span>
@@ -490,13 +490,19 @@ Jika LOF(E) &gt;&gt; 1, maka titik E kemungkinan adalah outlier karena memiliki 
 2       3.0       4.0          1
 3       4.0       5.0          1
 4       5.0       6.0          1
+5      10.0      20.0         -1
+6      12.0      22.0         -1
+7      14.0      24.0         -1
+8       3.5       4.0          1
+9       4.5       5.5          1
 
-Jumlah outlier: 0
+Jumlah outlier: 3
 
 Data Outlier:
-Empty DataFrame
-Columns: [Feature1, Feature2, LOF Label]
-Index: []
+   Feature1  Feature2  LOF Label
+5      10.0      20.0         -1
+6      12.0      22.0         -1
+7      14.0      24.0         -1
 </pre></div>
 </div>
 </div>
