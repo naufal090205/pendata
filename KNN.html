@@ -384,6 +384,9 @@ document.write(`
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengapa-knn-bisa-digunakan-untuk-deteksi-outlier">1. Mengapa KNN Bisa Digunakan untuk Deteksi Outlier?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deteksi-outlier-dengan-knn">2. Langkah-Langkah Deteksi Outlier dengan KNN</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memisahkan-outlier-dari-data"><strong>Memisahkan Outlier dari data</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-akurasi-data"><strong>Menghitung akurasi data</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-data"><strong>Visualisasi data</strong></a></li>
 </ul>
             </nav>
         </div>
@@ -708,7 +711,9 @@ Jumlah data setelah outlier dihapus: 138
 </div>
 </div>
 <p>Kode di atas bertujuan untuk mendeteksi dan menghapus outlier dalam dataset menggunakan K-Nearest Neighbors (KNN) Outlier Detection. Data diambil dari dua database berbeda, PostgreSQL dan MySQL, kemudian digabung berdasarkan kolom “id” dan “class”. Setelah itu, fitur numerik seperti “petal length”, “petal width”, “sepal length”, dan “sepal width” dipilih untuk analisis.</p>
-<p>##<strong>Memisahkan Outlier dari data</strong></p>
+</section>
+<section id="memisahkan-outlier-dari-data">
+<h2><strong>Memisahkan Outlier dari data</strong><a class="headerlink" href="#memisahkan-outlier-dari-data" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">psycopg2</span>
@@ -1113,7 +1118,9 @@ Menggunakan LOF untuk mendeteksi dan menghapus outlier berdasarkan fitur numerik
 Jumlah data yang tersisa setelah penghapusan outlier dihitung dan ditampilkan.
 Hasilnya bisa digunakan untuk analisis lebih lanjut atau pemodelan machine learning tanpa gangguan dari outlier.
 Jika outlier ternyata berpengaruh negatif pada model, maka penghapusannya dapat meningkatkan akurasi model prediksi.</p>
-<p>##<strong>Menghitung akurasi data</strong></p>
+</section>
+<section id="menghitung-akurasi-data">
+<h2><strong>Menghitung akurasi data</strong><a class="headerlink" href="#menghitung-akurasi-data" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="n">X</span> <span class="o">=</span> <span class="n">df_merged</span><span class="p">[</span><span class="n">feature_columns</span><span class="p">]</span>
@@ -1194,7 +1201,9 @@ Iris-versicolor       1.00      0.86      0.92         7
 <p>Kode ini digunakan untuk membandingkan performa KNN pada data dengan dan tanpa outlier.
 Jika akurasi meningkat setelah outlier dihapus, berarti outlier memang berdampak buruk pada model.
 Jika akurasi tetap atau menurun, mungkin outlier mengandung informasi yang berguna.</p>
-<p>##<strong>Visualisasi data</strong></p>
+</section>
+<section id="visualisasi-data">
+<h2><strong>Visualisasi data</strong><a class="headerlink" href="#visualisasi-data" title="Link to this heading">#</a></h2>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -1513,6 +1522,9 @@ Iris-versicolor       0.67      0.57      0.62         7
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengapa-knn-bisa-digunakan-untuk-deteksi-outlier">1. Mengapa KNN Bisa Digunakan untuk Deteksi Outlier?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deteksi-outlier-dengan-knn">2. Langkah-Langkah Deteksi Outlier dengan KNN</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memisahkan-outlier-dari-data"><strong>Memisahkan Outlier dari data</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-akurasi-data"><strong>Menghitung akurasi data</strong></a></li>
+<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-data"><strong>Visualisasi data</strong></a></li>
 </ul>
   </nav></div>
 
