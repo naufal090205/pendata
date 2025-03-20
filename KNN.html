@@ -183,6 +183,7 @@
 <li class="toctree-l1"><a class="reference internal" href="pendat1.html">Tugas 1 Pendata</a></li>
 <li class="toctree-l1 current active has-children"><a class="reference internal" href="Pendat2.html">Deteksi OutLier</a><details open="open"><summary><span class="toctree-toggle" role="presentation"><i class="fa-solid fa-chevron-down"></i></span></summary><ul class="current">
 <li class="toctree-l2 current active"><a class="current reference internal" href="#"><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong></a></li>
+
 <li class="toctree-l2"><a class="reference internal" href="LOF.html"><strong>Deteksi Outlier dengan metode Local Outlier Factor (LOF) dalam Data Understanding</strong></a></li>
 </ul>
 </details></li>
@@ -381,13 +382,17 @@ document.write(`
             </div>
             <nav aria-label="Page">
                 <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengapa-knn-bisa-digunakan-untuk-deteksi-outlier">1. Mengapa KNN Bisa Digunakan untuk Deteksi Outlier?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deteksi-outlier-dengan-knn">2. Langkah-Langkah Deteksi Outlier dengan KNN</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memisahkan-outlier-dari-data"><strong>Memisahkan Outlier dari data</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-akurasi-data"><strong>Menghitung akurasi data</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-data"><strong>Visualisasi data</strong></a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-data"><strong>Visualisasi data</strong></a></li>
+</ul>
+
             </nav>
         </div>
     </div>
@@ -1202,8 +1207,9 @@ Iris-versicolor       1.00      0.86      0.92         7
 Jika akurasi meningkat setelah outlier dihapus, berarti outlier memang berdampak buruk pada model.
 Jika akurasi tetap atau menurun, mungkin outlier mengandung informasi yang berguna.</p>
 </section>
-<section id="visualisasi-data">
-<h2><strong>Visualisasi data</strong><a class="headerlink" href="#visualisasi-data" title="Link to this heading">#</a></h2>
+</section>
+<section class="tex2jax_ignore mathjax_ignore" id="visualisasi-data">
+<h1><strong>Visualisasi data</strong><a class="headerlink" href="#visualisasi-data" title="Link to this heading">#</a></h1>
 <div class="cell docutils container">
 <div class="cell_input docutils container">
 <div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="kn">import</span> <span class="nn">numpy</span> <span class="k">as</span> <span class="nn">np</span>
@@ -1453,7 +1459,6 @@ Iris-versicolor       0.67      0.57      0.62         7
 </div>
 </div>
 </section>
-</section>
 
     <script type="text/x-thebe-config">
     {
@@ -1519,13 +1524,17 @@ Iris-versicolor       0.67      0.57      0.62         7
   </div>
   <nav class="bd-toc-nav page-toc">
     <ul class="visible nav section-nav flex-column">
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#"><strong>Deteksi Outlier dengan K-Nearest Neighbors (KNN) dalam Data Understanding</strong></a><ul class="visible nav section-nav flex-column">
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#mengapa-knn-bisa-digunakan-untuk-deteksi-outlier">1. Mengapa KNN Bisa Digunakan untuk Deteksi Outlier?</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#langkah-langkah-deteksi-outlier-dengan-knn">2. Langkah-Langkah Deteksi Outlier dengan KNN</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#kesimpulan">Kesimpulan</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#memisahkan-outlier-dari-data"><strong>Memisahkan Outlier dari data</strong></a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#menghitung-akurasi-data"><strong>Menghitung akurasi data</strong></a></li>
-<li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-data"><strong>Visualisasi data</strong></a></li>
 </ul>
+</li>
+<li class="toc-h1 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-data"><strong>Visualisasi data</strong></a></li>
+</ul>
+
   </nav></div>
 
 </div></div>
