@@ -425,8 +425,6 @@ document.write(`
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-data-asli-tanpa-outlier-menggunakan-pca">Visualisasi data asli tanpa outlier menggunakan PCA</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing-dan-reduksi-dimensi">Preprocessing dan Reduksi Dimensi</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standarisasi-dengan-menggunakan-standar-scaler">Standarisasi dengan menggunakan Standar Scaler</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-setelah-standarisasi-menggunakan-standardscaler">Data setelah standarisasi menggunakan StandardScaler</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standarisasi-dengan-menggunakan-minmaxscaler">Standarisasi dengan menggunakan MinMaxScaler</a></li>
 </ul>
 </li>
@@ -1489,37 +1487,6 @@ Data tidak outlier :
 </section>
 <section id="preprocessing-dan-reduksi-dimensi">
 <h2>Preprocessing dan Reduksi Dimensi<a class="headerlink" href="#preprocessing-dan-reduksi-dimensi" title="Link to this heading">#</a></h2>
-<section id="standarisasi-dengan-menggunakan-standar-scaler">
-<h3>Standarisasi dengan menggunakan Standar Scaler<a class="headerlink" href="#standarisasi-dengan-menggunakan-standar-scaler" title="Link to this heading">#</a></h3>
-<p>standarisasi menggunakan Standard Scaler untuk menyamakan skala antar fitur dalam dataset.karena memiliki rentang nilai yang sangat bervariasi. Perbedaan skala ini dapat menyebabkan model machine learning.</p>
-<p>teknik praproses data (data preprocessing) untuk menyamakan skala fitur dalam sebuah dataset. Tujuannya adalah agar setiap fitur (variabel) memiliki kontribusi yang seimbang terhadap proses pengolahan data, terutama dalam algoritma berbasis jarak</p>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># # Drop kolom non-numerik</span>
-<span class="c1"># features = df_merged.drop(columns=[&#39;id&#39;, &#39;class&#39;])</span>
-
-<span class="c1"># # Normalisasi</span>
-<span class="c1"># scaler = StandardScaler()</span>
-<span class="c1"># scaled_features = scaler.fit_transform(features)</span>
-
-<span class="c1"># # Reduksi dimensi untuk visualisasi</span>
-<span class="c1"># pca = PCA(n_components=2)</span>
-<span class="c1"># reduced_features = pca.fit_transform(scaled_features)</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
-<section id="data-setelah-standarisasi-menggunakan-standardscaler">
-<h3>Data setelah standarisasi menggunakan StandardScaler<a class="headerlink" href="#data-setelah-standarisasi-menggunakan-standardscaler" title="Link to this heading">#</a></h3>
-<div class="cell docutils container">
-<div class="cell_input docutils container">
-<div class="highlight-ipython3 notranslate"><div class="highlight"><pre><span></span><span class="c1"># print (scaled_features);</span>
-</pre></div>
-</div>
-</div>
-</div>
-</section>
 <section id="standarisasi-dengan-menggunakan-minmaxscaler">
 <h3>Standarisasi dengan menggunakan MinMaxScaler<a class="headerlink" href="#standarisasi-dengan-menggunakan-minmaxscaler" title="Link to this heading">#</a></h3>
 <p>normalisasi menggunakan MinMaxScaler sebagai upaya untuk menyamakan skala seluruh fitur dalam dataset.karena fitur-fitur dalam data memiliki rentang nilai yang berbeda-beda, yang dapat memengaruhi kinerja model machine learning, terutama algoritma yang bergantung pada perhitungan jarak seperti KNN atau SVM.</p>
@@ -2251,8 +2218,6 @@ Iterasi 18: 3.1942
 </li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#visualisasi-data-asli-tanpa-outlier-menggunakan-pca">Visualisasi data asli tanpa outlier menggunakan PCA</a></li>
 <li class="toc-h2 nav-item toc-entry"><a class="reference internal nav-link" href="#preprocessing-dan-reduksi-dimensi">Preprocessing dan Reduksi Dimensi</a><ul class="nav section-nav flex-column">
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standarisasi-dengan-menggunakan-standar-scaler">Standarisasi dengan menggunakan Standar Scaler</a></li>
-<li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#data-setelah-standarisasi-menggunakan-standardscaler">Data setelah standarisasi menggunakan StandardScaler</a></li>
 <li class="toc-h3 nav-item toc-entry"><a class="reference internal nav-link" href="#standarisasi-dengan-menggunakan-minmaxscaler">Standarisasi dengan menggunakan MinMaxScaler</a></li>
 </ul>
 </li>
